@@ -140,18 +140,11 @@
 body {
   margin:0;
   padding:0;
-  background:#151515 url("../images/bkg.png") 0 0;
+  background:#151515 url("../assets/images/bkg.png") 0 0;
   color:#eaeaea;
   font-size:16px;
   line-height:1.5;
   font-family:Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace
-}
-
-.headerContainer{
-  width:90%;
-  max-width:1000px;
-  margin:0 auto;
-
 }
 
 .container {
@@ -182,14 +175,10 @@ header {
   margin:0 0 40px 0
 }
 
-.home{
-  margin-left: -200px ;
-}
-
 header h1 {
   font-size:30px;
   line-height:1.5;
-  margin:0 0 0 -40px;
+  margin:-8px 0 0 -40px;
   font-weight:bold;
   font-family:Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;
   color:#b5e853;
@@ -335,11 +324,12 @@ hr {
 }
 .btn-github .icon {
   opacity:0.6;
-  background:url("../images/blacktocat.png") 0 0 no-repeat
+  background:url("../assets/images/blacktocat.png") 0 0 no-repeat
 }
 a {
   color:#63c0f5;
-  text-shadow:0 0 5px rgba(104,182,255,0.5)
+  text-shadow:0 0 5px rgba(104,182,255,0.5);
+  text-decoration: none;
 }
 .cf:before,
 .cf:after {
@@ -362,18 +352,68 @@ a {
   <body>
 
     <header>
-      <div class="headerContainer">
+      <div class="container">
       <ul class="home">
         <li><a href="https://flaviocanofari.github.io/statistics/">HOME</a></li>
       </ul>
-      <h1>Homework 1</h1>
+      <h1>Homework 1 - Theory</h1>
       </div>
     </header>
 
     <div class="container">
       <section id="main_content">
 
-        <p>hw1</p>
+        <h1>⁠Basic notions in Statistics: Statistical Units, Population, Distribution.</h1>
+        <p>
+          <ul><li><h2>Statistical Units:</h2></li></ul>
+          A statistical unit is a unit of observation or measurement for which data are collected or derive. <br/>
+          Each statistical unit can be associated with a number of measurable variables, which may be quantitative (e.g. age, height, weight) or qualitative (e.g. gender, marital status, eye colour). These variables are then analysed to draw conclusions about the population or phenomenon of interest.
+        </p>
+        <p>
+          <ul><li><h2>Population:</h2></li></ul>
+          Population is a statistical term that designates the pool from which a sample is drawn for a study made by a number of statistical units sharing at least one common property that is of interest in a statistical analysis.<br/> A population can consist of people, objects, events or any other relevant statistical unit. For example, in a public health survey, the population could be ‘all the inhabitants of a city’, while in a study of a factory, it could be ‘all the products made in a certain period’.<br/>There are various selection methods that can be used to select a sample but there must be a clear set of rules about who belongs to the group.
+        </p>
+        <p>
+          <ul><li><h2>Distribution:</h2></li></ul>
+          A distribution in statistics is a function that shows the possible values for a variable and how often they occur, often represented by means of tables, bar graphs, or histograms.<br/>
+          Discrete and continuous probability distributions are two fundamental types of probability distributions, each describing different kinds of random variables.<br/>
+          <b>Discrete probability distributions</b> describe random variables that take on specific and distinct values, such as the number of heads in 10 coin tosses or the number of customers in one hour. The outcomes are countable and finite (or countable).<br/>
+          <b>Continuous probability distributions</b>, on the other hand, apply to random variables that can take on any value in an interval, such as the height of a person or the time to complete a task. Here, the values are infinite and not countable, with distribution curves that are more ‘smooth’ than discrete ones.
+        </p>
+        <p>
+          <h1>Notion of average, computational problems with floating point rapresentation (errors, catastrophical cancellation) and numerical solution (Knuth).</h1>
+        </p>
+        <p>
+          <ul><li><h2>Average:</h2></li></ul>
+          The avarage is a number expressing the central or typical value in a set of data, in particular the mode, median, or (most commonly) the mean, which is calculated by dividing the sum of the values in the set by their number.
+        </p>
+        <p>
+          <ul>
+            <li>
+              <h2>Computational problems with floating point rapresentation:</h2>
+            </li>
+          </ul>
+          In computing, numbers are often represented using floating-point arithmetic, a system that approximates real numbers within the limits of computer hardware. Floating-point arithmetic introduces rounding errors and precision issues, leading to significant inaccuracies in certain calculations.<br/>
+          Typically a floating-point number is represented as: <br/><br/>
+          <i>number = sign × mantissa × base<sup>exponent</i></sup><br/><br/>
+          This form allows for the representation of very large and very small numbers, but the number of bits allocated for the mantissa (precision) and the exponent is limited. As a result, some real numbers cannot be represented exactly, and rounding occurs. These rounding errors can accumulate, leading to discrepancies in calculations. <br/><br/>
+          A particularly severe form of precision loss is <b>catastrophic cancellation</b>, which occurs when subtracting two nearly equal numbers. In such cases, most of the significant digits cancel out, and the result is dominated by the less significant (and more error-prone) digits. For example:<br/><br/>
+          <i>z = (a + b) - (a - b)</i><br/><br/>
+          If <i>a</i> and <i>b</i> are very close in value, the subtraction <i>a - b</i> can lead to large relative errors because the significant digits in a and b cancel each other, leaving only imprecise digits. This can lead to results with little or no meaningful accuracy.
+        </p>
+        <p><ul>
+          <li>
+            <h2>Numerical Solution:</h2>
+          </li>
+        </ul>
+        In his magnum opus, <a href="https://it.wikipedia.org/wiki/The_Art_of_Computer_Programming"><i><b>The Art of Computer Programming</b></i></a>, Knuth discusses several problems around floating-point arithmetic and the precision of computation. He discusses methods to overcome catastrophic cancellation, for example, and suggests techniques aimed at enhancing numerical precision. <br/>
+Knuth indicates the need to reimplement numerical algorithms in such a way so as to avoid such situations. For example, instead of just subtracting two floating-point numbers that are nearly equal, one can:<br/>
+
+<ol>
+  <li><b>Use Algebraic Rearrangement:</b> Given two values that are nearly equal, subtraction can be avoided by algebraically rearranging expressions. The formula for calculating the roots of a quadratic equation can be rewritten to minimize cancellation errors.</li>
+  <li><b>High-Precision Arithmetic:</b> For critical computations, a higher precision-for example, via arbitrary-precision arithmetic libraries-can be used at the expense of some computational cost.</li>
+  <li><b>Error Analysis:</b> Careful error analysis of algorithms uncovers where the algorithm rounding errors and cancellations will occur; often improvements to the algorithms result or error bounding becomes possible.</li>
+</ol>
       </section>
     </div>
     <script>
