@@ -26,7 +26,7 @@
 
 
 <!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>Student Info: | Statistics 2024/2025</title>
+<title>Statistics 2024/2025</title>
 <meta name="generator" content="Jekyll v3.10.0" />
 <meta property="og:title" content="Student Info:" />
 <meta property="og:locale" content="en_US" />
@@ -149,7 +149,9 @@ body {
 
 .headerContainer{
   width:90%;
-  margin:0 auto
+  max-width:1000px;
+  margin:0 auto;
+
 }
 
 .container {
@@ -179,6 +181,11 @@ header {
   padding:20px 0;
   margin:0 0 40px 0
 }
+
+.home{
+  margin-left: -200px ;
+}
+
 header h1 {
   font-size:30px;
   line-height:1.5;
@@ -356,17 +363,37 @@ a {
 
     <header>
       <div class="headerContainer">
-      <ul>
+      <ul class="home">
         <li><a href="https://flaviocanofari.github.io/statistics/">HOME</a></li>
       </ul>
+      <h1>Homework 1</h1>
       </div>
     </header>
 
     <div class="container">
       <section id="main_content">
-        <h2 id="student-info">Homework 1</h2>
+
         <p>hw1</p>
       </section>
     </div>
+    <script>
+      function adjustMargin() {
+        var element = document.querySelector('.home');
+        var screenWidth = window.innerWidth;
+  
+        if (screenWidth > 1400) {
+          element.style.marginLeft = "-20%";
+        } else if (screenWidth < 1000) {
+          element.style.marginLeft = "0px";
+        } else if (screenWidth > 1000 & screenWidth <1080){
+          element.style.marginLeft = "-40px";
+        } else {
+          newMargin=-((screenWidth-1000)/2);
+          element.style.marginLeft = newMargin+"px";
+        }
+      }
+      adjustMargin();
+      window.addEventListener('resize', adjustMargin);
+    </script>
   </body>
 </html>
