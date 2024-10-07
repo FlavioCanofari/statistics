@@ -465,7 +465,8 @@
             </form>
             <div id="chartContainer">
                 <canvas id="myChart" width="400" height="200"></canvas>
-                <canvas id="mySecondChart" width="400" height="200" style="padding-top: 40px;"></canvas>
+                <canvas id="mySecondChart" width="400" height="200" style="padding-top: 40px; padding-bottom: 40px;"></canvas>
+                <u><b><p id="result" style="text-align: center; font-size: 20px;"></p></b></u>
             </div>
 
 
@@ -583,18 +584,11 @@
             });
         }
 
-        function createSecondChart(servers, attackersData) {
+        function createSecondChart(servers, penetrationCounts) {
             if (mySecondChart !== null) {
                 mySecondChart.destroy();
             }
 
-            const penetrationCounts = Array(servers.length).fill(0);
-
-            attackersData.forEach((attacker) => {
-                const finalPenetrations = attacker.data[attacker.data.length - 1];
-                penetrationCounts[finalPenetrations - 1]++;
-            });
-            console.log(penetrationCounts)
             const secondCtx = document.getElementById('mySecondChart').getContext('2d');
 
             mySecondChart = new Chart(secondCtx, {
@@ -667,6 +661,22 @@
             });
         }
 
+        function computeAverage(penCount, index, currentMean) {
+
+            if (index >= penCount.length) {
+                return currentMean; 
+            }
+
+            const value = penCount[index];
+
+            if (!isNaN(value)) {
+                index=index+1;
+                currentMean = currentMean + (value - currentMean) / index;
+            }
+
+            return computeAverage(penCount, index, currentMean);
+        }
+
         function generateDataset(attackers, servers, probability) {
 
             let dataset = [];
@@ -730,10 +740,22 @@
             }
 
             attackerDatatsets = generateDataset(attackers, servers, p)
-
+            
+            const penetrationCounts = Array(servers.length).fill(0);
+            let attackerPenetrations = []
+            
+            attackerDatatsets.forEach((attacker) => {
+                const finalPenetrations = attacker.data[attacker.data.length - 1];
+                attackerPenetrations.push(finalPenetrations)
+                penetrationCounts[finalPenetrations - 1]++;
+            });
+            
+            const finalMean = computeAverage(attackerPenetrations, 0, 0, 0);
+            const average = finalMean ? finalMean.toFixed(2) : 0;
 
             createChart(servers, attackers, attackerDatatsets);
-            createSecondChart(servers, attackerDatatsets);
+            createSecondChart(servers, penetrationCounts);
+            document.getElementById('result').innerHTML = `The avarage number of server successfully breached is ${average}`;
             document.getElementById('chartContainer').style.display = 'flex';
         });
     </script>
