@@ -423,6 +423,10 @@
                 <li><a href="https://flaviocanofari.github.io/statistics/">HOME</a></li>
             </ul>
             <h1>Homework 1 - Practice (javascript)</h1>
+            <ul>
+                <li>In order to see the theory <a
+                        href="https://flaviocanofari.github.io/statistics/hw1/hw1_theory.html">click here</a></li>
+            </ul>
         </div>
     </header>
 
@@ -467,18 +471,24 @@
 
             <h1>Code explanation</h1>
             <p>
-                Initially, the code assigns user input regarding the number of servers, attackers and the probability of server penetration to variables and initialises two arrays that we will need to create the charts. <br/><br/>
-                <img src="./code-1.png" >
-                <br/><br/>
-                Then the datasets to be shown on the graph are generated, i.e. for each attacker an array having a "step up" for each server he managed to breach. The step up happens if the random number generated is higher then the given probability.
-                <br/><br/>
-                <img src="./code-2.png" >
-                <br/><br/>
-                Finally the charts are created with the dataset generated in the previous step, where the first char shows which server was breached by each attacker, while the second chart shows the number of attackers that breached each server. 
-                <br/><br/>
-                <img src="./code-3.png" >
-                <br/><br/>
-                
+                Initially, the code assigns user input regarding the number of servers, attackers and the probability of
+                server penetration to variables and initialises two arrays that we will need to create the charts.
+                <br /><br />
+                <img src="./code-1.png">
+                <br /><br />
+                Then the datasets to be shown on the graph are generated, i.e. for each attacker an array having a "step
+                up" for each server he managed to breach. The step up happens if the random number generated is higher
+                then the given probability.
+                <br /><br />
+                <img src="./code-2.png">
+                <br /><br />
+                Finally the charts are created with the dataset generated in the previous step, where the first char
+                shows which server was breached by each attacker, while the second chart shows the number of attackers
+                that breached each server.
+                <br /><br />
+                <img src="./code-3.png">
+                <br /><br />
+
             </p>
         </section>
     </div>
@@ -565,7 +575,7 @@
 
             attackersData.forEach((attacker) => {
                 const finalPenetrations = attacker.data[attacker.data.length - 1];
-                penetrationCounts[finalPenetrations-1]++;
+                penetrationCounts[finalPenetrations - 1]++;
             });
             console.log(penetrationCounts)
             const secondCtx = document.getElementById('mySecondChart').getContext('2d');
@@ -574,17 +584,17 @@
                 type: 'line',
                 data: {
                     labels: servers,
-                    datasets:[{
-                        label:"Number of attackers for each level",
+                    datasets: [{
+                        label: "Number of attackers for each level",
                         borderColor: 'rgba(75, 192, 192, 1)', // Set line color
-						borderWidth: 2,
-						radius: 4,
-						pointBackgroundColor: 'rgba(75, 192, 192, 1)',
-						fill: false,
+                        borderWidth: 2,
+                        radius: 4,
+                        pointBackgroundColor: 'rgba(75, 192, 192, 1)',
+                        fill: false,
                         tension: 0.4,
-						data: penetrationCounts,
+                        data: penetrationCounts,
                     }]
-						
+
                 },
                 options: {
                     plugins: {
