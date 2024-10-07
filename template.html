@@ -26,7 +26,7 @@
 
 
 <!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>Student Info: | Statistics 2024/2025</title>
+<title>Statistics 2024/2025</title>
 <meta name="generator" content="Jekyll v3.10.0" />
 <meta property="og:title" content="Student Info:" />
 <meta property="og:locale" content="en_US" />
@@ -140,12 +140,13 @@
 body {
   margin:0;
   padding:0;
-  background:#151515 url("../images/bkg.png") 0 0;
+  background:#151515 url("../assets/images/bkg.png") 0 0;
   color:#eaeaea;
   font-size:16px;
   line-height:1.5;
   font-family:Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace
 }
+
 .container {
   width:90%;
   max-width:1000px;
@@ -173,10 +174,11 @@ header {
   padding:20px 0;
   margin:0 0 40px 0
 }
+
 header h1 {
   font-size:30px;
   line-height:1.5;
-  margin:0 0 0 -40px;
+  margin:-8px 0 0 -40px;
   font-weight:bold;
   font-family:Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;
   color:#b5e853;
@@ -250,7 +252,7 @@ dt {
   font-weight:bold
 }
 ul li {
-  list-style-image:url("../images/bullet.png")
+  list-style-image:url("../assets/images/bullet.png")
 }
 blockquote {
   color:#aaa;
@@ -322,11 +324,12 @@ hr {
 }
 .btn-github .icon {
   opacity:0.6;
-  background:url("../images/blacktocat.png") 0 0 no-repeat
+  background:url("../assets/images/blacktocat.png") 0 0 no-repeat
 }
 a {
   color:#63c0f5;
-  text-shadow:0 0 5px rgba(104,182,255,0.5)
+  text-shadow:0 0 5px rgba(104,182,255,0.5);
+  text-decoration: none;
 }
 .cf:before,
 .cf:after {
@@ -350,30 +353,36 @@ a {
 
     <header>
       <div class="container">
-        <a id="a-title" href="/statistics/">
-          <h1>Statistics 2024/2025</h1>
-        </a>
-        <h2>This website contains all the Statistics homework done by me for the year 2024/2025.</h2>
-
-        <section id="downloads">
-          
-        </section>
+      <ul class="home">
+        <li><a href="https://flaviocanofari.github.io/statistics/">HOME</a></li>
+      </ul>
+      <h1>header title</h1>
       </div>
     </header>
 
     <div class="container">
       <section id="main_content">
-        <h2 id="student-info">Student Info:</h2>
-<p>Flavio Canofari ID:2137058</p>
-
-<h2 id="homeworks-links">Homeworks Links</h2>
-<p>All the homeworks links below:</p>
-
-<ul>
-  <li><a href="/statistics/hw1/hw1.html">HW1</a></li>
-</ul>
-
+        <p>content</p>
       </section>
     </div>
+    <script>
+      function adjustMargin() {
+        var element = document.querySelector('.home');
+        var screenWidth = window.innerWidth;
+  
+        if (screenWidth > 1400) {
+          element.style.marginLeft = "-20%";
+        } else if (screenWidth < 1000) {
+          element.style.marginLeft = "0px";
+        } else if (screenWidth > 1000 & screenWidth <1080){
+          element.style.marginLeft = "-40px";
+        } else {
+          newMargin=-((screenWidth-1000)/2);
+          element.style.marginLeft = newMargin+"px";
+        }
+      }
+      adjustMargin();
+      window.addEventListener('resize', adjustMargin);
+    </script>
   </body>
 </html>
