@@ -469,19 +469,19 @@
             <form id="valuesForm" class="mb-4">
                 <div class="mb-3">
                     <label for="integer1" class="form-label">Number of servers</label>
-                    <input type="number" class="form-control" id="integer1" placeholder="Please insert an integer"
+                    <input value=100 type="number" class="form-control" id="integer1" placeholder="Please insert an integer"
                         required>
                 </div>
 
                 <div class="mb-3">
                     <label for="integer2" class="form-label">Number of attackers</label>
-                    <input type="number" class="form-control" id="integer2" placeholder="Please insert an integer"
+                    <input value=100 type="number" class="form-control" id="integer2" placeholder="Please insert an integer"
                         required>
                 </div>
 
                 <div class="mb-3">
                     <label for="decimal" class="form-label">Probability to penetrate the servers</label>
-                    <input type="number" class="form-control" id="decimal" step="0.1" min="0" max="1"
+                    <input value=0.5 type="number" class="form-control" id="decimal" step="0.1" min="0" max="1"
                         placeholder="Please insert a decimal number between 0 and 1" required>
                 </div>
 
@@ -646,8 +646,7 @@
             const secondCtx = document.getElementById('mySecondChart').getContext('2d');
 
             mySecondChart = new Chart(secondCtx, {
-                maintainAspectRatio: true,
-                responsive: true,
+
                 type: 'bar',
                 data: {
                     labels: servers,
