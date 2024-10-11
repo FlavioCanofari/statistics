@@ -469,14 +469,14 @@
             <form id="valuesForm" class="mb-4">
                 <div class="mb-3">
                     <label for="integer1" class="form-label">Number of servers</label>
-                    <input value=50 type="number" class="form-control" id="integer1" placeholder="Please insert an integer"
-                        required>
+                    <input value=50 type="number" class="form-control" id="integer1"
+                        placeholder="Please insert an integer" required>
                 </div>
 
                 <div class="mb-3">
                     <label for="integer2" class="form-label">Number of attackers</label>
-                    <input value=100 type="number" class="form-control" id="integer2" placeholder="Please insert an integer"
-                        required>
+                    <input value=100 type="number" class="form-control" id="integer2"
+                        placeholder="Please insert an integer" required>
                 </div>
 
                 <div class="mb-3">
@@ -569,7 +569,7 @@
         let myChart = null;
         let mySecondChart = null;
 
-        function createChart(servers, attackers, attackerDatatsets) {
+        function createChart(servers, attackers, attackerDatasets) {
 
             if (myChart !== null) {
                 myChart.destroy();
@@ -580,7 +580,7 @@
                 type: 'line',
                 data: {
                     labels: servers,
-                    datasets: attackerDatatsets
+                    datasets: attackerDatasets
                 },
                 options: {
                     maintainAspectRatio: false,
@@ -623,8 +623,8 @@
                                 },
                             },
                             position: 'right',
-                            min: 0,
-                            max: servers.length,
+                            min: -servers.length + 1,
+                            max: servers.length + 1,
                             grid: {
                                 color: 'white'
                             },
@@ -642,21 +642,21 @@
             if (mySecondChart !== null) {
                 mySecondChart.destroy();
             }
+            let newLabel = servers.slice(1).reverse().map(num => -num).concat(servers);
 
             const secondCtx = document.getElementById('mySecondChart').getContext('2d');
-
             mySecondChart = new Chart(secondCtx, {
 
                 type: 'bar',
                 data: {
-                    labels: servers,
+                    labels: newLabel,
                     datasets: [{
                         label: "Number of attackers for each level",
-                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderColor: 'yellow',
                         borderWidth: 2,
                         radius: 4,
-                        pointBackgroundColor: 'rgba(75, 192, 192, 1)',
-                        backgroundColor: "rgba(75, 192, 192, 1)",
+                        pointBackgroundColor: 'yellow',
+                        backgroundColor: "yellow",
                         fill: true,
                         data: penetrationCounts,
                     }]
@@ -696,7 +696,6 @@
                         },
                         y: {
                             display: true,
-                            beginAtZero: true,
                             reverse: true,
                             title: {
                                 display: false,
@@ -706,13 +705,10 @@
                                     size: 18,
                                 },
                             },
-
                             position: 'left',
                             grid: {
                                 color: 'white'
                             },
-                            min: 0,
-                            max: servers.length,
                             ticks: {
                                 callback: function (value, index, values) {
                                     return '';
@@ -756,13 +752,13 @@
 
                     let randomValue = Math.random();
 
-                    let value = max;
                     if (randomValue < probability) {
                         max = max + 1;
-                        value = max;
+                    } else {
+                        max = max - 1;
                     }
 
-                    attackerData.push(value);
+                    attackerData.push(max);
                 }
 
                 dataset.push({
@@ -808,20 +804,20 @@
                 attackers.push(i);
             }
 
-            attackerDatatsets = generateDataset(attackers, servers, p)
+            attackerDatasets = generateDataset(attackers, servers, p)
 
-            const penetrationCounts = Array(servers.length).fill(0);
+            const penetrationCounts = Array(servers.length * 2 - 1).fill(0);
             let attackerPenetrations = []
-            attackerDatatsets.forEach((attacker) => {
+            attackerDatasets.forEach((attacker) => {
                 const finalPenetrations = attacker.data[attacker.data.length - 1];
                 attackerPenetrations.push(finalPenetrations)
-                penetrationCounts[finalPenetrations ]++;
+                penetrationCounts[finalPenetrations + servers.length-1]++;
             });
 
             const finalMean = computeAverage(attackerPenetrations, 0, 0, 0);
             const average = finalMean ? finalMean.toFixed(2) : 0;
 
-            createChart(servers, attackers, attackerDatatsets);
+            createChart(servers, attackers, attackerDatasets);
             createSecondChart(servers, penetrationCounts);
             document.getElementById('result').innerHTML = `The avarage number of server successfully breached is ${average}`;
             document.getElementById('chartContainer').style.display = 'flex';
