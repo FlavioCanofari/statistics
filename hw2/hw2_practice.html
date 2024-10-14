@@ -410,10 +410,8 @@
         #chartContainer {
             position: relative;
             width: 100%;
-            height: 1000px;
+            height: 1150px;
             display: none;
-            /* flex-direction: row; */
-            /* overflow: hidden; */
         }
 
         #singleChartOne {
@@ -438,15 +436,8 @@
         #singleChartFour {
             position: absolute;
             bottom: 0px;
-            left: 0px;
-            width: 80%;
-        }
-
-        #singleChartFive {
-            position: absolute;
-            bottom: 0px;
-            right: 0px;
-            width: 15%;
+            left: 36px;
+            width: calc(80% + 21px);;
         }
 
         canvas {
@@ -470,12 +461,7 @@
         }
 
         #myFourthChart {
-            height: 460px !important;
-
-        }
-
-        #myFifthChart {
-            height: 460px !important;
+            height: 500px !important;
 
         }
     </style>
@@ -545,9 +531,9 @@
             <canvas id="myChart"></canvas>
         </div>
         <div id="singleChartTwo">
+            <p id="resultMean" style="text-align: left; font-size: 20px; margin-top: -92px; margin-left: 30px;"></p>
+            <p id="resultVariance" style="text-align: left; font-size: 20px; margin-left: 30px;"></p>
             <canvas id="mySecondChart"></canvas>
-            <p id="resultMean" style="text-align: left; font-size: 20px; margin-top: -130px; margin-left: 30px;"></p>
-            <p id="resultVariance" style="text-align: left; font-size: 20px; margin-top: -1px; margin-left: 30px;"></p>
         </div>
         <div id="singleChartThree">
             <canvas id="myThirdChart"></canvas>
@@ -556,9 +542,6 @@
         </div>
         <div id="singleChartFour">
             <canvas id="myFourthChart"></canvas>
-        </div>
-        <div id="singleChartFive">
-            <canvas id="myFifthChart"></canvas>
         </div>
     </div>
     <div class="mine_container">
@@ -592,8 +575,9 @@
         let myChart = null;
         let mySecondChart = null;
         let myThirdChart = null;
+        let myFourthChart = null;
 
-        function createChart(servers, attackers, attackerDatasets) {
+        function createChart(servers, attackerDatasets) {
 
             if (myChart !== null) {
                 myChart.destroy();
@@ -847,6 +831,91 @@
             });
         }
 
+        function createFourthChart(servers, successfulJumps, relativeSuccessfulJumps) {
+
+            if (myFourthChart !== null) {
+                myFourthChart.destroy();
+            }
+
+            const fourthCtx = document.getElementById('myFourthChart').getContext('2d');
+            myFourthChart = new Chart(fourthCtx, {
+                type: 'line',
+                data: {
+                    labels: servers,
+                    datasets: [{
+                        label: `Absolute frequency`,
+                        data: successfulJumps,
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 3,
+                        pointRadius: 2,
+                        pointHoverRadius: 1,
+                        tension: 0.4,
+                    },
+                    {
+                        label: `Relative frequency`,
+                        data: relativeSuccessfulJumps,
+                        borderColor: 'rgba(255, 150, 100, 1)',
+                        borderWidth: 3,
+                        pointRadius: 2,
+                        pointHoverRadius: 1,
+                        tension: 0.4,
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            labels: {
+                                color: 'white'
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            display: true,
+                            position: 'bottom',
+                            title: {
+                                display: true,
+                                text: 'servers',
+                                color: "white",
+                                font: {
+                                    size: 18,
+                                },
+                            },
+                            grid: {
+                                color: 'white'
+                            },
+                            ticks: {
+                                color: 'white'
+                            }
+                        },
+                        y: {
+                            display: true,
+                            position: 'right',
+                            grid: {
+                                color: 'white'
+                            },
+                            title: {
+                                display: true,
+                                text: 'successful jumps',
+                                color: "white",
+                                font: {
+                                    size: 18,
+                                },
+                            },
+                            ticks: {
+                                stepSize: 1,
+                                color: 'white'
+                            }
+                        },
+                    }
+                }
+            });
+        }
+
+
         function computeMeanAndVariance(penCount, index = 0, currentMean = 0, currentVariance = 0) {
             if (index >= penCount.length) {
                 return { mean: currentMean, variance: currentVariance };
@@ -857,18 +926,14 @@
             if (!isNaN(value)) {
                 const newIndex = index + 1;
 
-                // Calcolo della nuova media passo-passo
                 const newMean = currentMean + (value - currentMean) / newIndex;
 
-                // Calcolo della varianza passo-passo
                 const delta = value - currentMean;
                 const newVariance = currentVariance + (delta * (value - newMean)) / newIndex;
 
-                // Chiama la funzione ricorsivamente per il prossimo elemento
                 return computeMeanAndVariance(penCount, newIndex, newMean, newVariance);
             }
 
-            // Se il valore non è un numero, passa al prossimo elemento
             return computeMeanAndVariance(penCount, index + 1, currentMean, currentVariance);
         }
 
@@ -876,6 +941,7 @@
         function generateDataset(attackers, servers, probability) {
 
             let dataset = [];
+            let totalSuccessfulJumps = Array(servers.length).fill(0);
 
             for (let i = 1; i <= attackers.length; i++) {
                 let attackerData = [];
@@ -888,6 +954,7 @@
 
                     if (randomValue < probability) {
                         max = max + 1;
+                        totalSuccessfulJumps[j] += 1;
                     } else {
                         max = max - 1;
                     }
@@ -907,7 +974,10 @@
                 });
             }
 
-            return dataset;
+            const relativeSuccessfulJumps = totalSuccessfulJumps.map((value, index) => {
+                return index === 0 ? value : value / index;
+            });
+            return [dataset, totalSuccessfulJumps, relativeSuccessfulJumps];
         }
 
 
@@ -943,45 +1013,48 @@
             if (integer3 < 0 || integer3 > integer1) {
                 event.preventDefault();
                 alert(`Error: The intermediate step must be between ${0} and ${integer1}.`);
+            } else {
+
+                const servers = [];
+                for (let i = 0; i <= integer1; i++) {
+                    servers.push(i);
+                }
+    
+                const attackers = [];
+                for (let i = 1; i <= integer2; i++) {
+                    attackers.push(i);
+                }
+    
+                let [attackerDatasets, successfulJumps, relativeSuccessfulJumps] = generateDataset(attackers, servers, p)
+    
+                let [finalDistribution, finalAttackerPenetrations] = getIntermediateDistribution(servers.length, attackerDatasets, integer1);
+    
+                let [intermediateDistribution, intermediateAttackerPenetration] = getIntermediateDistribution(servers.length, attackerDatasets, integer3);
+    
+                const finalMeanAndVariance = computeMeanAndVariance(finalAttackerPenetrations);
+                const intermediateMeanAndVariance = computeMeanAndVariance(intermediateAttackerPenetration);
+                const finalAvarage = finalMeanAndVariance.mean ? finalMeanAndVariance.mean.toFixed(2) : 0;
+                const intermediateAvarage = intermediateMeanAndVariance.mean ? intermediateMeanAndVariance.mean.toFixed(2) : 0;
+                const finalVariance = finalMeanAndVariance.variance ? finalMeanAndVariance.variance.toFixed(2) : 0;
+                const intermediateVariance = intermediateMeanAndVariance.variance ? intermediateMeanAndVariance.variance.toFixed(2) : 0;
+                const chart1 = document.getElementById('singleChartOne');
+                const chart3 = document.getElementById('singleChartThree');
+    
+                createChart(servers, attackerDatasets);
+                createSecondChart(servers, finalDistribution);
+                createThirdChart(servers, intermediateDistribution);
+                createFourthChart(servers, successfulJumps, relativeSuccessfulJumps);
+                document.getElementById('resultMean').innerHTML = `Mean: ${finalAvarage}`;
+                document.getElementById('result2Mean').innerHTML = `Mean: ${intermediateAvarage}`;
+                document.getElementById('resultVariance').innerHTML = `Variance: ${finalVariance}`;
+                document.getElementById('result2Variance').innerHTML = `Variance: ${intermediateVariance}`;
+                document.getElementById('chartContainer').style.display = 'block';
+    
+    
+                const percentage = (((chart1.clientWidth - 40) / integer1 * integer3 + 42)) / window.innerWidth * 100;
+                chart3.style.left = percentage + '%';
             }
 
-            const servers = [];
-            for (let i = 0; i <= integer1; i++) {
-                servers.push(i);
-            }
-
-            const attackers = [];
-            for (let i = 1; i <= integer2; i++) {
-                attackers.push(i);
-            }
-
-            let attackerDatasets = generateDataset(attackers, servers, p)
-
-            let [finalDistribution, finalAttackerPenetrations] = getIntermediateDistribution(servers.length, attackerDatasets, integer1);
-
-            let [intermediateDistribution, intermediateAttackerPenetration] = getIntermediateDistribution(servers.length, attackerDatasets, integer3);
-
-            const finalMeanAndVariance = computeMeanAndVariance(finalAttackerPenetrations);
-            const intermediateMeanAndVariance = computeMeanAndVariance(intermediateAttackerPenetration);
-            const finalAvarage = finalMeanAndVariance.mean ? finalMeanAndVariance.mean.toFixed(2) : 0;
-            const intermediateAvarage = intermediateMeanAndVariance.mean ? intermediateMeanAndVariance.mean.toFixed(2) : 0;
-            const finalVariance = finalMeanAndVariance.variance ? finalMeanAndVariance.variance.toFixed(2) : 0;
-            const intermediateVariance = intermediateMeanAndVariance.variance ? intermediateMeanAndVariance.variance.toFixed(2) : 0;
-            const chart1 = document.getElementById('singleChartOne');
-            const chart3 = document.getElementById('singleChartThree');
-
-            createChart(servers, attackers, attackerDatasets);
-            createSecondChart(servers, finalDistribution);
-            createThirdChart(servers, intermediateDistribution);
-            document.getElementById('resultMean').innerHTML = `Mean: ${finalAvarage}`;
-            document.getElementById('result2Mean').innerHTML = `Mean: ${intermediateAvarage}`;
-            document.getElementById('resultVariance').innerHTML = `Variance: ${finalVariance}`;
-            document.getElementById('result2Variance').innerHTML = `Variance: ${intermediateVariance}`;
-            document.getElementById('chartContainer').style.display = 'block';
-
-
-            const percentage = (((chart1.clientWidth - 40) / integer1 * integer3 + 42)) / window.innerWidth * 100;
-            chart3.style.left = percentage + '%';
         });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
