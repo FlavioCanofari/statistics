@@ -410,12 +410,13 @@
         #chartContainer {
             position: relative;
             width: 100%;
-            height: 1150px;
+            height: 1200px;
             display: none;
         }
 
         #singleChartOne {
             position: absolute;
+            top:50px;
             left: 10px;
             width: 80%;
         }
@@ -423,13 +424,13 @@
         #singleChartTwo {
             position: absolute;
             left: 80%;
-            top: 20px;
+            top: 70px;
             width: 15%;
         }
 
         #singleChartThree {
             position: absolute;
-            top: 20px;
+            top: 70px;
             width: 15%;
         }
 
@@ -437,7 +438,8 @@
             position: absolute;
             bottom: 0px;
             left: 36px;
-            width: calc(80% + 21px);;
+            width: calc(80% + 21px);
+            ;
         }
 
         canvas {
@@ -531,8 +533,10 @@
             <canvas id="myChart"></canvas>
         </div>
         <div id="singleChartTwo">
-            <p id="resultMean" style="text-align: left; font-size: 20px; margin-top: -92px; margin-left: 30px;"></p>
-            <p id="resultVariance" style="text-align: left; font-size: 20px; margin-left: 30px;"></p>
+            <div id="resultContainer" style="margin-top: -92px; margin-left: 30px;">
+                <p id="resultMean" style="text-align: left; font-size: 20px;"></p>
+                <p id="resultVariance" style="text-align: left; font-size: 20px;"></p>
+            </div>
             <canvas id="mySecondChart"></canvas>
         </div>
         <div id="singleChartThree">
@@ -1019,18 +1023,18 @@
                 for (let i = 0; i <= integer1; i++) {
                     servers.push(i);
                 }
-    
+
                 const attackers = [];
                 for (let i = 1; i <= integer2; i++) {
                     attackers.push(i);
                 }
-    
+
                 let [attackerDatasets, successfulJumps, relativeSuccessfulJumps] = generateDataset(attackers, servers, p)
-    
+
                 let [finalDistribution, finalAttackerPenetrations] = getIntermediateDistribution(servers.length, attackerDatasets, integer1);
-    
+
                 let [intermediateDistribution, intermediateAttackerPenetration] = getIntermediateDistribution(servers.length, attackerDatasets, integer3);
-    
+
                 const finalMeanAndVariance = computeMeanAndVariance(finalAttackerPenetrations);
                 const intermediateMeanAndVariance = computeMeanAndVariance(intermediateAttackerPenetration);
                 const finalAvarage = finalMeanAndVariance.mean ? finalMeanAndVariance.mean.toFixed(2) : 0;
@@ -1039,7 +1043,7 @@
                 const intermediateVariance = intermediateMeanAndVariance.variance ? intermediateMeanAndVariance.variance.toFixed(2) : 0;
                 const chart1 = document.getElementById('singleChartOne');
                 const chart3 = document.getElementById('singleChartThree');
-    
+
                 createChart(servers, attackerDatasets);
                 createSecondChart(servers, finalDistribution);
                 createThirdChart(servers, intermediateDistribution);
@@ -1049,10 +1053,19 @@
                 document.getElementById('resultVariance').innerHTML = `Variance: ${finalVariance}`;
                 document.getElementById('result2Variance').innerHTML = `Variance: ${intermediateVariance}`;
                 document.getElementById('chartContainer').style.display = 'block';
-    
-    
+
                 const percentage = (((chart1.clientWidth - 40) / integer1 * integer3 + 42)) / window.innerWidth * 100;
                 chart3.style.left = percentage + '%';
+
+                let resultContainer = document.getElementById('resultContainer');
+
+                if (resultContainer.offsetHeight === 76) {
+                    resultContainer.style.marginTop = '-92px';
+                } else if (resultContainer.offsetHeight === 106) {
+                    resultContainer.style.marginTop = '-122px';
+                } else {
+                    resultContainer.style.marginTop = '-152px';
+                }
             }
 
         });
