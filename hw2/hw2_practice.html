@@ -943,16 +943,16 @@
 
 
         function generateDataset(attackers, servers, probability) {
-
+            let serverLen = servers.length
             let dataset = [];
-            let totalSuccessfulJumps = Array(servers.length).fill(0);
+            let totalSuccessfulJumps = Array(serverLen).fill(0);
 
             for (let i = 1; i <= attackers.length; i++) {
                 let attackerData = [];
                 attackerData.push(0);
                 let max = 0;
 
-                for (let j = 1; j < servers.length; j++) {
+                for (let j = 1; j < serverLen; j++) {
 
                     let randomValue = Math.random();
 
@@ -978,8 +978,8 @@
                 });
             }
 
-            const relativeSuccessfulJumps = totalSuccessfulJumps.map((value, index) => {
-                return index === 0 ? value : value / index;
+            const relativeSuccessfulJumps = totalSuccessfulJumps.map((value) => {
+                return value / (serverLen-1);
             });
             return [dataset, totalSuccessfulJumps, relativeSuccessfulJumps];
         }
