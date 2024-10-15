@@ -599,9 +599,13 @@
             <h2>Creating Charts</h2>
             <p>
                 As for the first homework, createChart() function is responsible for creating the first chart and
-                createSecondChart() function creates the second chart.<br/>
-                In this homework createThirdChart() is introduced to show how many attackers have succeeded in penetrating a certain number of servers for an intermediate step.<br/><br/>
-                A new function introduced is also createFourthChart(), which is used to rapresent the Absolute and Realative Frequency, where the x-axis represents the number of servers and the y-axis represents the number of successful penetrations in each step for the absolute frequency, and the number of successful penetrations divided by all the step for the relative frequency.<br />
+                createSecondChart() function creates the second chart.<br />
+                In this homework createThirdChart() is introduced to show how many attackers have succeeded in
+                penetrating a certain number of servers for an intermediate step.<br /><br />
+                A new function introduced is also createFourthChart(), which is used to rapresent the Absolute and
+                Realative Frequency, where the x-axis represents the number of servers and the y-axis represents the
+                number of successful penetrations in each step for the absolute frequency, and the number of successful
+                penetrations divided by all the step for the relative frequency.<br />
                 <img src="./code-1.png">
                 <br /><br />
             <h2>Data Generation</h2>
@@ -609,29 +613,39 @@
             For each attacker, an attack against a list of servers is simulated and a calculation is made of how many
             servers it manages to penetrate.<br />
             For each server, a random value between 0 and 1 is generated using Math.random(). If this value is less than
-            the probability of success (indicated by the user), the attacker succeeds in penetrating that server (jump +1), otherwise the attacker fails (jump -1).<br />
+            the probability of success (indicated by the user), the attacker succeeds in penetrating that server (jump
+            +1), otherwise the attacker fails (jump -1).<br />
             The results are stored in a ‘dataset’, where each attacker has a line tracking how many servers he has
             penetrated as the attack progresses.<br /><br />
-            In the meanwhile also the number of successful jumps done in each step is saved in an array for the absolute frequency, and for the relative frequency the latter array is taken and copied to another array by dividing each element for the total numebr of steps.<br /><br />
+            In the meanwhile also the number of successful jumps done in each step is saved in an array for the absolute
+            frequency, and for the relative frequency the latter array is taken and copied to another array by dividing
+            each element for the total numebr of steps.<br /><br />
             <img src="./code-2.png">
             <br /><br />
             <h2>Mean and Variance Calculation</h2>
-            As for the first homework, this function calculates the average number of servers penetrated by all attackers using recursion.<br />
+            As for the first homework, this function calculates the average number of servers penetrated by all
+            attackers using recursion.<br />
             The idea is to gradually add up the values of servers penetrated by each attacker and update the average
-            step by step.<br /><br />
-            In this homework this funcion has been updated to calculate the variance in the same way.<br /><br />
+            step by step using the following formula: \[ \mu_n = \mu_{n-1} + \frac{x_n - \mu_{n-1}}{n} \]<br /><br />
+            In this homework this funcion has been updated to calculate the variance in the same way using the following formula: \[ M_n = M_{n-1} + (x_n - \mu_n)(x_n - \mu_{n-1}) \]<br /><br />
             <img src="./code-3.png">
             <br /><br />
             <h2>Distribution Calculation</h2>
-            This function calculates how many attackers have succeeded in penetrating a certain number of servers for an intermediate step in order to show the intermediate (and/or final) distribution.<br/>
-            It also calculates the number of penetrated and failed to penetrate systems for each attacker, which is then used to calculate mean and variance<br /><br />
+            This function calculates how many attackers have succeeded in penetrating a certain number of servers for an
+            intermediate step in order to show the intermediate (and/or final) distribution.<br />
+            It also calculates the number of penetrated and failed to penetrate systems for each attacker, which is then
+            used to calculate mean and variance<br /><br />
             <img src="./code-4.png">
             <br /><br />
             <h2>HTML form management</h2>
-            As for the first homework, when the user submits the form, the values entered for the number of servers (integer1), the number of
-            attackers (integer2), the probability of success (p) and the intermidiate step (integer3) are collected.<br />
-            These values are used to generate the attack data, compute all the distribution, mean, variance and frequencies in order to create or update the graphs.<br />
-            After the graphs have been created, the value of the mean and variance for both the distribution are shown.<br /><br />
+            As for the first homework, when the user submits the form, the values entered for the number of servers
+            (integer1), the number of
+            attackers (integer2), the probability of success (p) and the intermidiate step (integer3) are
+            collected.<br />
+            These values are used to generate the attack data, compute all the distribution, mean, variance and
+            frequencies in order to create or update the graphs.<br />
+            After the graphs have been created, the value of the mean and variance for both the distribution are
+            shown.<br /><br />
             <img src="./code-5.png">
             <br /><br />
             </p>
@@ -1002,25 +1016,26 @@
         }
 
 
-        function computeMeanAndVariance(penCount, index = 0, currentMean = 0, currentVariance = 0) {
+        function computeMeanAndVariance(penCount, index = 0, currentMean = 0, M2 = 0) {
             if (index >= penCount.length) {
-                return { mean: currentMean, variance: currentVariance };
+                const variance = index > 1 ? M2 / (index - 1) : 0;
+                return { mean: currentMean, variance: variance };
             }
 
             const value = penCount[index];
 
             if (!isNaN(value)) {
                 const newIndex = index + 1;
-
-                const newMean = currentMean + (value - currentMean) / newIndex;
-
                 const delta = value - currentMean;
-                const newVariance = currentVariance + (delta * (value - newMean)) / newIndex;
+                const newMean = currentMean + delta / newIndex;
 
-                return computeMeanAndVariance(penCount, newIndex, newMean, newVariance);
+                const delta2 = value - newMean;
+                const newM2 = M2 + delta * delta2;
+
+                return computeMeanAndVariance(penCount, newIndex, newMean, newM2);
             }
 
-            return computeMeanAndVariance(penCount, index + 1, currentMean, currentVariance);
+            return computeMeanAndVariance(penCount, index + 1, currentMean, M2);
         }
 
 
@@ -1145,6 +1160,8 @@
         });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.1.2/es5/tex-mml-chtml.js">
+    </script>
 </body>
 
 </html>
