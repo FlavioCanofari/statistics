@@ -619,7 +619,7 @@
             penetrated as the attack progresses.<br /><br />
             In the meanwhile also the number of successful jumps done in each step is saved in an array for the absolute
             frequency, and for the relative frequency the latter array is taken and copied to another array by dividing
-            each element for the total numebr of steps.<br /><br />
+            each element for the total numebr of attempts done in the step (which is the number of attackers).<br /><br />
             <img src="./code-2.png">
             <br /><br />
             <h2>Mean and Variance Calculation</h2>
@@ -714,10 +714,10 @@
                             },
                             position: 'bottom',
                             grid: {
-                                color: 'white'
+                                color: 'grey'
                             },
                             ticks: {
-                                color: 'white'
+                                color: 'grey'
                             }
                         },
                         y: {
@@ -734,11 +734,11 @@
                             min: -servers.length + 1,
                             max: servers.length + 1,
                             grid: {
-                                color: 'white'
+                                color: 'grey'
                             },
                             ticks: {
                                 stepSize: 1,
-                                color: 'white'
+                                color: 'grey'
                             }
                         },
                     }
@@ -985,17 +985,17 @@
                                 },
                             },
                             grid: {
-                                color: 'white'
+                                color: 'grey'
                             },
                             ticks: {
-                                color: 'white'
+                                color: 'grey'
                             }
                         },
                         y: {
                             display: true,
                             position: 'right',
                             grid: {
-                                color: 'white'
+                                color: 'grey'
                             },
                             title: {
                                 display: true,
@@ -1007,7 +1007,7 @@
                             },
                             ticks: {
                                 stepSize: 1,
-                                color: 'white'
+                                color: 'grey'
                             }
                         },
                     }
@@ -1075,7 +1075,7 @@
                 });
             }
             const relativeSuccessfulJumps = totalSuccessfulJumps.map((value) => {
-                return value / (serverLen - 1);
+                return value / (attackers.length);
             });
             return [dataset, totalSuccessfulJumps, relativeSuccessfulJumps];
         }
