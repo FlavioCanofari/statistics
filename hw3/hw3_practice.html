@@ -486,6 +486,10 @@
   </header>
   <div class="mine_container">
     <section id="main_content">
+      <h1>Stochastic Differential Equation simulator refinement</h1>
+      <p>
+        Refine your SDE simulator to simulate a continuous time process where we can have an attack (indicated with a jump of +1) at any time with a constant rate of attack. To create the approximation of time continuity subdivide your reference temporal window into numerous intervals of vanishing size dt = 1/n and to each infinitesimal interval assign a probability of a +1 "jump" (attack success) equal to Lambda * dt, where Lambda is a simulation parameter, having the meaning of expected total number of attacks in the reference period.
+      </p>
       <h2>Please fill the forms below to generate the chart</h2>
 
       <form id="valuesForm" class="mb-4">
@@ -541,6 +545,39 @@
     <div id="singleChartFour">
       <canvas id="myFourthChart"></canvas>
     </div>
+  </div>
+  <div class="mine_container">
+    <section id="main_content">
+      <h1>Code Explanation</h1>
+            <p>
+                Most of the code is the same as the previous homework. Below there are the only few relevant changes in this homework. 
+                <br /><br />
+            <h2>Data Generation</h2>
+            As for the second homework, this function simulates the attack process, with few modifications.<br />
+            No an attach is is simulated for each interval selected by the user.<br />
+            For each interval, a random value between 0 and 1 is generated using Math.random(). If this value is less than
+            the probability of lambda * dt (where dt is equale to the Total Time Window/Intervals, both chosen by the user with lambda), the attacker succeeds in penetrating a server (jump
+            +1)<br />
+            The results are stored in a ‘dataset’, where each attacker has a line tracking how many servers he has
+            penetrated as the attack progresses.<br /><br />
+            In the meanwhile also the number of successful jumps done in each step is saved in an array for the absolute
+            frequency, and for the relative frequency the latter array is taken and copied to another array by dividing
+            each element for the total numebr of attempts done in the step (which is the number of attackers).<br /><br />
+            <img src="./code-1.png">
+            <br /><br />
+            <h2>HTML form management</h2>
+            As for the second homework, when the user submits the form, the values entered for the Total Simulation Time (or Total Time Window)
+            (integer1), The Total Number of Intervals (integer1_5), the number of
+            attackers (integer2) and \(\lambda\) (lambda) are
+            collected.<br />
+            These values are used to generate the attack data, compute the distribution, mean, variance and
+            frequencies in order to create or update the graphs.<br />
+            After the graphs have been created, the value of the mean and variance for both the distribution are
+            shown.<br /><br />
+            <img src="./code-2.png">
+            <br /><br />
+            </p>
+    </section>
   </div>
   <script>
     function adjustMargin() {
@@ -1025,9 +1062,7 @@
           document.getElementById('resultMean').innerHTML = `Mean: ${finalAvarage}`;
           document.getElementById('resultVariance').innerHTML = `Variance: ${finalVariance}`;
           document.getElementById('chartContainer').style.display = 'block';
-
           let resultContainer = document.getElementById('resultContainer');
-
           if (resultContainer.offsetHeight === 76) {
             resultContainer.style.marginTop = '-92px';
           } else if (resultContainer.offsetHeight === 106) {
