@@ -426,7 +426,75 @@
 
   <div class="container">
     <section id="main_content">
-      
+      <h1>Statistical Independence</h1>
+      The concept of statistical independence is fundamental in probability and statistics and describes the
+      relationship between two events (or variables) where the occurrence of one event does not influence the occurrence
+      of the other. </br></br>
+
+      <h2>Definition of Statistical Independence</h2>
+
+      Two events, \(A\) and \(B\), are defined as independent if the occurrence of one does not affect the occurrence
+      of the
+      other. Formally, we can express this independence through probabilities. Specifically, \(A\) and \(B\) are
+      independent if
+      and only if:
+
+
+      \[P(A \cap B) = P(A) \cdot P(B)\]
+
+
+      where:</br></br>
+
+      <ul>
+        <li style="list-style-image: none;">
+          \(P(A \cap B)\) is the probability that both events \(A\) and \(B\) occur simultaneously.
+        </li>
+        <li style="list-style-image: none;">
+          \(P(A)\) and \(P(B)\) are the probabilities of events \(A\) and \(B\) occurring individually.
+        </li>
+      </ul>
+
+      <h2>Intuition Behind the Formula</h2>
+
+      The formula \(P(A \cap B) = P(A) \cdot P(B)\) essentially states that, if \(A\) and \(B\) are independent, the probability of
+      both events occurring together is simply the product of their individual probabilities. This means that knowing
+      one event has occurred does not provide any information about the probability of the other.
+
+      For instance:</br></br>
+
+      <ul>
+        <li style="list-style-image: none;">Imagine flipping two separate coins. Let \(A\) be the event “the first coin lands on heads,” and \(B\) be the event “the second coin lands on heads.”</li>
+        <li style="list-style-image: none;">The probability of \(A\) occurring (the first coin landing on heads) is \(P(A) = 0.5\).</li>
+        <li style="list-style-image: none;">Similarly, \(P(B) = 0.5\).</li>
+      </ul>
+
+      If the two coin flips are independent, the probability that both coins land on heads (event \(A \cap B\) ) is:
+
+
+      \[P(A \cap B) = P(A) \cdot P(B) = 0.5 \cdot 0.5 = 0.25\]
+
+
+      This means that in 25% of the trials, both coins will land on heads, confirming that one coin’s result does not
+      impact the other’s.</br></br>
+
+      <h2>Independence and Conditional Probability</h2>
+
+      An alternative way to define independence is by using conditional probability. The conditional probability of \(A\)
+      given \(B\), denoted \(P(A | B)\), is the probability of \(A\) occurring if we know \(B\) has occurred. For \(A\) and \(B\) to be
+      independent, the occurrence of \(B\) should not affect the probability of \(A\). Hence, if \(A\) and \(B\) are independent:
+
+
+     \[P(A | B) = P(A)\]
+
+
+      This means that knowing \(B\) has occurred does not change the probability of \(A\) occurring, reinforcing that \(A\) and \(B\)
+      are statistically independent.</br></br>
+
+      <h2>Comparison to Dependent Events</h2>
+
+      In contrast, when two events are dependent, the occurrence of one affects the probability of the other. For
+      dependent events \(C\) and \(D\), we would observe that \(P(C \cap D) \neq P(C) \cdot P(D)\), and consequently, \(P(C | D)
+      \neq P(C)\).
     </section>
   </div>
   <script>
