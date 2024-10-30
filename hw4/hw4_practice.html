@@ -553,6 +553,20 @@
   <div class="mine_container">
     <section id="main_content">
       <h1>Code Explanation</h1>
+      <p>
+          Most of the code is the same as the previous homework. Below there are the only few relevant changes in this homework. 
+          <br /><br />
+      <h2>Data Generation</h2>
+      As for the previous homeworks, this function simulates the attack process, with few modifications.<br />
+      For each interval, a random value between 0 and 1 is generated using Math.random(). If this value is less than
+      the probability p (chosen by the user), the attacker succeeds in penetrating a server (jump
+      +\(\sqrt{dt}\)), otherwirse the attacker fails (jump -\(\sqrt{dt}\)). \(dt\) is equal to the Total Time Window/Intervals.<br />
+      The results are stored in a ‘dataset’, where each attacker has a line tracking how many servers he has
+      penetrated as the attack progresses.<br /><br />
+      In the meanwhile also the number of successful jumps done in each step is saved in an array for the absolute
+      frequency, and for the relative frequency the latter array is taken and copied to another array by dividing
+      each element for the total numebr of attempts done in the step (which is the number of attackers).<br /><br />
+      <img src="./code-1.png">
     </section>
   </div>
   <script>
@@ -580,7 +594,7 @@
     // let myThirdChart = null;
     let myFourthChart = null;
 
-    function createChart(servers, attackerDatasets, sqrtDt) {
+    function createChart(servers, attackerDatasets) {
 
       if (myChart !== null) {
         myChart.destroy();
@@ -634,8 +648,6 @@
                 },
               },
               position: 'left',
-              // min: -servers.length * sqrtDt + 1,
-              // max: servers.length * sqrtDt - 1,
               grid: {
                 color: 'grey'
               },
