@@ -6,7 +6,6 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="/statistics/assets/css/style.css?v=2338855d07a80ee1e002e9f9dc12344203d0c366">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
   <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
 
@@ -173,10 +172,11 @@
       font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace
     }
 
-    .mine_container {
+    .container {
       width: 90%;
       max-width: 1000px;
-      margin: 0 auto
+      margin: 0 auto;
+      padding: 0
     }
 
     section {
@@ -351,7 +351,7 @@
 
     .btn {
       display: inline-block;
-      background: -webkit-linear-gradient(top, rgba(130, 130, 130, 0.6), rgba(100, 100, 100, 0.6) 50%, rgba(70, 70, 70, 0.8) 50%, rgba(40, 40, 40, 0.8));
+      background: -webkit-linear-gradient(top, rgba(40, 40, 40, 0.3), rgba(35, 35, 35, 0.3) 50%, rgba(10, 10, 10, 0.3) 50%, rgba(0, 0, 0, 0.3));
       padding: 8px 18px;
       border-radius: 50px;
       border: 2px solid rgba(0, 0, 0, 0.7);
@@ -360,14 +360,14 @@
       color: rgba(255, 255, 255, 0.8);
       font-family: Helvetica, Arial, sans-serif;
       font-weight: bold;
-      font-size: 18px;
+      font-size: 13px;
       text-decoration: none;
       text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.75);
       box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05)
     }
 
     .btn:hover {
-      background: -webkit-linear-gradient(top, rgba(130, 130, 130, 0.6), rgba(100, 100, 100, 0.6) 50%, rgba(70, 70, 70, 0.8) 50%, rgba(40, 40, 40, 0.8));
+      background: -webkit-linear-gradient(top, rgba(40, 40, 40, 0.6), rgba(35, 35, 35, 0.6) 50%, rgba(10, 10, 10, 0.8) 50%, rgba(0, 0, 0, 0.8))
     }
 
     .btn .icon {
@@ -406,171 +406,128 @@
     #a-title {
       text-decoration: none
     }
-
-    #chartContainer {
-      position: relative;
-      width: 100%;
-      height: 600px;
-      display: none;
-    }
-
-    #singleChartOne {
-      position: absolute;
-      top: 50px;
-      left: 10px;
-      width: 80%;
-    }
-
-    #singleChartTwo {
-      position: absolute;
-      left: calc(80% - 4px);
-      top: 60px;
-      width: 15%;
-    }
-
-    #singleChartThree {
-      position: absolute;
-      top: 70px;
-      width: 15%;
-    }
-
-    #singleChartFour {
-      position: absolute;
-      bottom: 0px;
-      left: 36px;
-      width: calc(80% + 21px);
-      ;
-    }
-
-    canvas {
-      width: 100% !important;
-
-    }
-
-    #myChart {
-      height: 500px !important;
-
-    }
-
-    #mySecondChart {
-      height: 458px !important;
-
-    }
-
-    /* #myThirdChart {
-      height: 460px !important;
-
-    } */
-
-    #myFourthChart {
-      height: 500px !important;
-
-    }
   </style>
-
 </head>
 
 <body>
 
   <header>
-    <div class="mine_container">
+    <div class="container">
       <ul class="home">
         <li><a href="https://flaviocanofari.github.io/statistics/">HOME</a></li>
       </ul>
-      <h1>Homework 5 - Practice</h1>
+      <h1>Homework 5 - Theory</h1>
       <ul>
-        <li>In order to see the theory <a href="https://flaviocanofari.github.io/statistics/hw5/hw5_theory.html">click
-            here</a></li>
+        <li>In order to see the practice <a
+            href="https://flaviocanofari.github.io/statistics/hw5/hw5_practice.html">click here</a></li>
       </ul>
     </div>
   </header>
-  <div class="mine_container">
+
+  <div class="container">
     <section id="main_content">
-      <h2>Please fill the forms below to generate the chart</h2>
-
-      <form id="valuesForm" class="mb-4">
-        <div class="mb-3">
-          <label for="integer1" class="form-label">Total Simulation Time (T)</label>
-          <input value=50 type="number" class="form-control" id="integer1" placeholder="Please insert an integer"
-            required>
-        </div>
-        <div class="mb-3">
-          <label for="integer1.5" class="form-label">Total Number of Intervals (n)</label>
-          <input value=100 type="number" class="form-control" id="integer1.5" placeholder="Please insert an integer"
-            required>
-        </div>
-
-        <div class="mb-3">
-          <label for="integer2" class="form-label">Number of Attackers</label>
-          <input value=50 type="number" class="form-control" id="integer2" placeholder="Please insert an integer"
-            required>
-        </div>
-
-        <div class="mb-3">
-          <label for="decimal" class="form-label">Probability (or \(\lambda\) for Poisson)</label>
-          <input value=0.5 type="number" class="form-control" id="decimal" step="0.1" min="0"
-            placeholder="Please insert a decimal greater than 0" required>
-        </div>
-
-        <div class="mb-3">
-          <label for="integer3" class="form-label">Intermediate Step</label>
-          <input value=25 type="number" class="form-control" id="integer3"
-            placeholder="Please insert an integer between 0 and the Total Simulation Time chosen" required>
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label">Select Chart Type</label>
-          <div>
-            <input type="radio" id="option1" name="chartType" value="type1" checked>
-            <label for="option1">Bernoulli</label>
-          </div>
-          <div>
-            <input type="radio" id="option2" name="chartType" value="type2">
-            <label for="option2">Random Walk</label>
-          </div>
-          <div>
-            <input type="radio" id="option3" name="chartType" value="type3">
-            <label for="option3">Poisson</label>
-          </div>
-          <div>
-            <input type="radio" id="option4" name="chartType" value="type4">
-            <label for="option4">Brownian Motion</label>
-          </div>
-        </div>
-
-        <button type="submit" class="btn btn-primary" style="margin-top: 10px;">Generate</button>
-      </form>
-    </section>
-  </div>
-  <div id="chartContainer">
-    <div id="singleChartOne">
-      <canvas id="myChart"></canvas>
-    </div>
-    <div id="singleChartTwo">
-      <div id="resultContainer" style="margin-top: -92px; margin-left: 30px;">
-        <p id="resultMean" style="text-align: left; font-size: 20px;"></p>
-        <p id="resultVariance" style="text-align: left; font-size: 20px;"></p>
-      </div>
-      <canvas id="mySecondChart"></canvas>
-    </div>
-    <div id="singleChartThree">
-      <canvas id="myThirdChart"></canvas>
-      <p id="result2Mean" style="text-align: left; font-size: 20px;margin-top:30px; margin-left: 30px;"></p>
-      <p id="result2Variance" style="text-align: left; font-size: 20px; margin-left: 30px;"></p>
-    </div>
-    <!-- <div id="singleChartFour">
-      <canvas id="myFourthChart"></canvas>
-    </div> -->
-  </div>
-  <div class="mine_container">
-    <section id="main_content">
-      <h1>Code Explanation</h1>
+      <h1>Proof of the Cauchy-Schwarz Inequality</h1>
       <p>
-          Most of the code is the same as the previous homework. Below there are the only few relevant changes in this homework. 
-          <br /><br />
-          <h2>HTML form management</h2>
-          The only relevant change is in the HTML form management, where now based on the type of chart selection will re-use the previous homework codes in order to generate the asked chart.<br /><br />
-          <img src="./code-1.png">
+        The Cauchy-Schwarz inequality states that for any vectors \(\mathbf{a}\) and \(\mathbf{b}\) in an inner product
+        space, the following inequality holds:
+
+        \[|\langle \mathbf{a}, \mathbf{b} \rangle| \leq \|\mathbf{a}\| \|\mathbf{b}\|\]
+
+        where \(\langle \mathbf{a}, \mathbf{b} \rangle\) denotes the inner product of \(\mathbf{a}\) and \(\mathbf{b}\),
+        and \(\|\mathbf{a}\|\) and \(\|\mathbf{b}\|\) denote the norms of \(\mathbf{a}\) and \(\mathbf{b}\),
+        respectively.
+
+      <ol>
+        <li>
+          Consider the vector form: For any two vectors \(\mathbf{a}\) and \(\mathbf{b}\), and any scalar \(t \in
+          \mathbb{R}\), the expression
+
+          \[\| \mathbf{a} + t \mathbf{b} \|^2 \geq 0\]
+
+          must be non-negative because the squared norm of any vector is always non-negative. </br></br>
+        </li>
+        <li>
+          Expand the norm: Using the definition of the inner product, expand \(\| \mathbf{a} + t \mathbf{b} \|^2\):
+
+          \[\| \mathbf{a} + t \mathbf{b} \|^2 = \langle \mathbf{a} + t \mathbf{b}, \mathbf{a} + t \mathbf{b} \rangle.\]
+
+          Expanding this inner product gives:
+
+          \[= \langle \mathbf{a}, \mathbf{a} \rangle + 2t \langle \mathbf{a}, \mathbf{b} \rangle + t^2 \langle
+          \mathbf{b}, \mathbf{b} \rangle.\]
+
+          Using the norm notation, we rewrite this as:
+
+          \[= \|\mathbf{a}\|^2 + 2t \langle \mathbf{a}, \mathbf{b} \rangle + t^2 \|\mathbf{b}\|^2.\]
+        </li>
+        <li>
+          Apply the quadratic inequality: Since \(\| \mathbf{a} + t \mathbf{b} \|^2 \geq 0\), we have:
+
+          \[\|\mathbf{a}\|^2 + 2t \langle \mathbf{a}, \mathbf{b} \rangle + t^2 \|\mathbf{b}\|^2 \geq 0.\]
+
+          This is a quadratic expression in \(t\), which must have a non-negative discriminant for the inequality to
+          hold for
+          all \(t\).</br></br>
+
+        </li>
+        <li>
+          Set up the discriminant: The discriminant of this quadratic in \(t\) is:
+
+          \[(2 \langle \mathbf{a}, \mathbf{b} \rangle)^2 - 4 \|\mathbf{a}\|^2 \|\mathbf{b}\|^2 = 4 \langle \mathbf{a},
+          \mathbf{b} \rangle^2 - 4 \|\mathbf{a}\|^2 \|\mathbf{b}\|^2.\]
+
+          For this discriminant to be non-positive, we must have:
+
+          \[\langle \mathbf{a}, \mathbf{b} \rangle^2 \leq \|\mathbf{a}\|^2 \|\mathbf{b}\|^2.\]
+
+          Taking the square root of both sides, we get the desired inequality:
+
+          \[|\langle \mathbf{a}, \mathbf{b} \rangle| \leq \|\mathbf{a}\| \|\mathbf{b}\|.\]
+
+        </li>
+      </ol>
+
+      <h1>Concepts of Independence and Uncorrelation</h1>
+
+      <h2>Independence</h2>
+
+      Two random variables \(X\) and \(Y\) are independent if the occurrence of one does not affect the probability
+      distribution
+      of the other. Mathematically, \(X\) and \(Y\) are independent if and only if:
+
+      \[P(X \leq x, Y \leq y) = P(X \leq x) P(Y \leq y) \quad \text{for all } x \text{ and } y.\]
+
+      This definition extends to events and functions of random variables as well, preserving the property that knowing
+      one variable gives no information about the other. Independence is a strong condition, implying that all moments
+      (not just the first and second) are uncorrelated.</br></br>
+
+      <h2>Uncorrelation</h2>
+
+      Two random variables X and Y are uncorrelated if their covariance is zero:
+
+      \[\text{Cov}(X, Y) = \mathbb{E}[(X - \mathbb{E}[X])(Y - \mathbb{E}[Y])] = 0.\]
+
+      Uncorrelatedness means that \(X\) and \(Y\) have no linear relationship, i.e., the expected product of their
+      deviations
+      from their means is zero. However, uncorrelation does not imply independence.</br>
+      For example, if \(X\) is uniformly
+      distributed on \([-1, 1]\) and \(Y = X^2\) , then \(X\) and \(Y\) are uncorrelated (since \(\mathbb{E}[X] = 0\)),
+      but they are
+      clearly dependent.</br></br>
+
+      <h2>Conceptual Differences and Measures</h2>
+      <ul>
+        <li> Independence implies uncorrelation, but the converse is not true.</li>
+        <li> Independence is a stronger concept: it encompasses all kinds of relationships (linear and nonlinear),
+          whileuncorrelation only ensures that there is no linear relationship.</li>
+      </ul>
+      <h3>Measures</h3>
+      <ul>
+        <li>Correlation coefficient \(r\) : Measures linear dependence; \(r = 0\) implies uncorrelation but not independence.</li>
+        <li>Mutual information: Measures any kind of dependency (linear or nonlinear) between \(X\) and \(Y\). \(I(X; Y) = 0\) if andonly if \(X\) and \(Y\) are independent.</li>
+      </ul>
+
+      </p>
     </section>
   </div>
   <script>
@@ -592,44 +549,8 @@
     adjustMargin();
     window.addEventListener('resize', adjustMargin);
   </script>
-  <script>
-    let myChart = null;
-    let mySecondChart = null;
-    let myThirdChart = null;
-    let myFourthChart = null;
-
-    document.getElementById('valuesForm').addEventListener('submit', function (event) {
-      event.preventDefault();
-      const integer1 = parseInt(document.getElementById('integer1').value);
-      const integer1_5 = parseInt(document.getElementById('integer1.5').value);
-      const integer2 = parseInt(document.getElementById('integer2').value);
-      const p = parseFloat(document.getElementById('decimal').value);
-      const integer3 = parseInt(document.getElementById('integer3').value);
-      const chartType = document.querySelector('input[name="chartType"]:checked').value;
-
-      switch (chartType) {
-        case 'type1':
-          generateChartType1(integer1, integer2, p);
-          break;
-        case 'type2':
-          generateChartType2(integer1, integer2, integer3, p, event);
-          break;
-        case 'type3':
-          generateChartType3(integer1, integer1_5, integer2, p, event);
-          break;
-        case 'type4':
-          generateChartType4(integer1, integer1_5, integer2, p, event);
-          break;
-      }
-    });
-  </script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
   <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.1.2/es5/tex-mml-chtml.js">
   </script>
-  <script src="./hw1_practice.js"></script>
-  <script src="./hw2_practice.js"></script>
-  <script src="./hw3_practice.js"></script>
-  <script src="./hw4_practice.js"></script>
 </body>
 
 </html>

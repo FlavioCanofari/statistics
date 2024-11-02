@@ -52,7 +52,6 @@ function createChart3(servers, attackerDatasets) {
             },
           },
           position: 'left',
-          max: servers.length + 1,
           grid: {
             color: 'grey'
           },
