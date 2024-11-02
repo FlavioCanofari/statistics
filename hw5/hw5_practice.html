@@ -486,6 +486,8 @@
   </header>
   <div class="mine_container">
     <section id="main_content">
+      <h1>E-M Simulator Enhancement</h1>
+      Enhance your existing Euler-Maruyama (E-M) simulator by developing a unified simulation framework. Create a general central class that can possibly manage various types of stochastic differential equations (SDEs).</br></br>
       <h2>Please fill the forms below to generate the chart</h2>
 
       <form id="valuesForm" class="mb-4">
@@ -564,6 +566,24 @@
   </div>
   <div class="mine_container">
     <section id="main_content">
+    <h1>Optional Exercise</h1>
+    <h2>Calculation of Regression Coefficients and R<sup>2</sup></h2>
+
+  <label for="xValues">Enter the values of X (separated by commas):</label>
+  <input style="width: 40%;" type="text" id="xValues" placeholder="Example: 1, 2, 3, 4, 5">
+
+  <label for="yValues">Enter the values of Y (separated by commas):</label>
+  <input style="width: 40%;" type="text" id="yValues" placeholder="Example: 2, 4, 5, 4, 5">
+    </br>
+    <button onclick="calculateRegression()" class="btn btn-primary" style="margin-top: 10px;">Calculate</button>
+
+  <div id="output">
+  </div>
+
+    </section>
+    </div>
+  <div class="mine_container">
+    <section id="main_content">
       <h1>Code Explanation</h1>
       <p>
           Most of the code is the same as the previous homework. Below there are the only few relevant changes in this homework. 
@@ -622,6 +642,66 @@
           break;
       }
     });
+  </script>
+   <script>
+    function calculateRegressionCoefficients(x, y) {
+      const n = x.length;
+
+      const meanX = x.reduce((sum, xi) => sum + xi, 0) / n;
+      const meanY = y.reduce((sum, yi) => sum + yi, 0) / n;
+
+      let numerator = 0;
+      let denominator = 0;
+      for (let i = 0; i < n; i++) {
+        numerator += (x[i] - meanX) * (y[i] - meanY);
+        denominator += (x[i] - meanX) ** 2;
+      }
+      const b = numerator / denominator;
+
+      const a = meanY - b * meanX;
+
+      return { a, b };
+    }
+
+    function calculateRSquared(x, y, a, b) {
+      const n = x.length;
+      const meanY = y.reduce((sum, yi) => sum + yi, 0) / n;
+
+      let SST = 0;
+      let SSE = 0;
+
+      for (let i = 0; i < n; i++) {
+        const yPredicted = a + b * x[i];
+        SST += (y[i] - meanY) ** 2;
+        SSE += (y[i] - yPredicted) ** 2;
+      }
+
+      const R2 = 1 - (SSE / SST);
+
+      return R2;
+    }
+
+    function calculateRegression() {
+      const xInput = document.getElementById("xValues").value;
+      const yInput = document.getElementById("yValues").value;
+
+      const x = xInput.split(",").map(Number);
+      const y = yInput.split(",").map(Number);
+
+      if (x.length !== y.length || x.some(isNaN) || y.some(isNaN)) {
+        document.getElementById("output").innerHTML = "<p style='color: red;'>Error: ensure that you enter valid numerical values for X and Y and that they have the same length.</p>";
+        return;
+      }
+
+      const { a, b } = calculateRegressionCoefficients(x, y);
+      const R2 = calculateRSquared(x, y, a, b);
+
+      document.getElementById("output").innerHTML = `
+    </br></br><p><strong>Intercept (a):</strong> ${a.toFixed(2)}</p>
+        <p><strong>Slope (b):</strong> ${b.toFixed(2)}</p>
+        <p><strong>R<sup>2</sup>:</strong> ${R2.toFixed(2)}</p>
+      `;
+    }
   </script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
   <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.1.2/es5/tex-mml-chtml.js">
