@@ -468,7 +468,7 @@
       </p>
       <h1>Code Explanation</h1>
       <h2>Generating Chart</h2>
-      <p>The generateHistorigram() function is responsible for collecting and validating the input in order to draw the
+      <p>The generateHistorigram() function is responsible for collecting the input in order to draw the
         distribution historigram. In fact it simply generate a random number for each interval specified by the user and
         assign it to an outcome based on it's probability. Every 100 interval it draws the graph in order to give it an
         animation</p>
@@ -659,11 +659,6 @@ function generateRandomProbabilities(numFields) {
 			const probabilitiesInput = Array.from(inputs).map(input => parseFloat(input.value) || 0);
       const outcomeCount = probabilitiesInput.length
       const sampleIntervals = parseInt(document.getElementById("sampleIntervals").value);
-
-      if (probabilitiesInput.length !== outcomeCount) {
-        alert("The number of probabilities must correspond to the number of outcomes.");
-        return;
-      }
 
       const totalProbability = probabilitiesInput.reduce((acc, val) => acc + val, 0);
 
