@@ -433,9 +433,10 @@
         <button type="submit" class="btn btn-primary" onclick="createFields()">Create Fields</button>
 
         <div id="inputContainer"></div>
-        <br/>
-        <button id="randomizeButton" class="btn btn-secondary" onclick="randomizeFields()" style="display: none;">Randomize Fields</button>
-        <br/><br/>
+        <br />
+        <button id="randomizeButton" class="btn btn-secondary" onclick="randomizeFields()"
+          style="display: none;">Randomize Fields</button>
+        <br /><br />
         <p id="sumStatus">Sum: 0.00</p>
         <label>Samples:</label>
         <input type="number" style="width: 10%;" id="sampleIntervals" min="1" max="100000" value="10000">
@@ -443,7 +444,8 @@
         <label>Sample size:</label>
         <input type="number" style="width: 10%;" id="size" min="2" max="20" value="10">
         <br><br>
-        <button id="generateGraphButton" type="submit" class="btn btn-primary" disabled="true" onclick="generateHistogram()">Generate</button>
+        <button id="generateGraphButton" type="submit" class="btn btn-primary" disabled="true"
+          onclick="generateHistogram()">Generate</button>
       </div>
 
     </section>
@@ -481,96 +483,118 @@
   </script>
   <script>
     function computeWeightedMeanAndVariance(values, probabilities, index = 0, currentMean = 0, M2 = 0) {
-    if (index >= values.length) {
+      if (index >= values.length) {
         const variance = M2;
         return { mean: currentMean, variance: variance };
       }
-    const value = values[index];
-    const prob = probabilities[index];
+      const value = values[index];
+      const prob = probabilities[index];
 
+      const delta = value - currentMean;
+      const newMean = currentMean + prob * delta;
+      const delta2 = value - newMean;
+      const newM2 = M2 + prob * delta * delta2;
+
+      return computeWeightedMeanAndVariance(values, probabilities, index + 1, newMean, newM2);
+    }
+
+    function computeMeanAndVariance(penCount, index = 0, currentMean = 0, M2 = 0) {
+      if (index >= penCount.length) {
+        const variance = index > 1 ? M2 / (index - 1) : 0;
+        return { mean: currentMean, variance: variance };
+      }
+
+      const value = penCount[index];
+
+      if (!isNaN(value)) {
+        const newIndex = index + 1;
         const delta = value - currentMean;
-    const newMean = currentMean + prob * delta;
-        const delta2 = value - newMean;
-    const newM2 = M2 + prob * delta * delta2;
+        const newMean = currentMean + delta / newIndex;
 
-    return computeWeightedMeanAndVariance(values, probabilities, index + 1, newMean, newM2);
+        const delta2 = value - newMean;
+        const newM2 = M2 + delta * delta2;
+
+        return computeMeanAndVariance(penCount, newIndex, newMean, newM2);
+      }
+
+      return computeMeanAndVariance(penCount, index + 1, currentMean, M2);
     }
 
     function createFields() {
-			const numFields = document.getElementById('numFields').value;
-		
-			if (numFields < 2 || numFields > 10) {
-				alert("Please enter a number between 2 and 10.");
-				return;
-			}
-		
-			const container = document.getElementById('inputContainer');
-			container.innerHTML = "";
-			document.getElementById('sumStatus').innerText = "Sum: 0.00";
-			document.getElementById('generateGraphButton').disabled = true;
-			document.getElementById('randomizeButton').style.display = 'inline';
-		
-			for (let i = 0; i < numFields; i++) {
-				const input = document.createElement("input");
-				input.type = "number";
-				input.step = "0.01";
-				input.min = "0";
-				input.max = "100";
+      const numFields = document.getElementById('numFields').value;
+
+      if (numFields < 2 || numFields > 10) {
+        alert("Please enter a number between 2 and 10.");
+        return;
+      }
+
+      const container = document.getElementById('inputContainer');
+      container.innerHTML = "";
+      document.getElementById('sumStatus').innerText = "Sum: 0.00";
+      document.getElementById('generateGraphButton').disabled = true;
+      document.getElementById('randomizeButton').style.display = 'inline';
+
+      for (let i = 0; i < numFields; i++) {
+        const input = document.createElement("input");
+        input.type = "number";
+        input.step = "0.01";
+        input.min = "0";
+        input.max = "100";
         input.style.width = "20%"
-				input.placeholder = `Probability ${i + 1}`;
-				input.oninput = validateSum;
-		
-				container.appendChild(input);
-				container.appendChild(document.createElement("br"));
-			}
-		}
-		
-		function randomizeFields() {
-			const inputs = document.querySelectorAll("#inputContainer input");
-			const numFields = inputs.length;
-			const randomValues = generateRandomProbabilities(numFields);
-		
-			inputs.forEach((input, index) => {
-				input.value = randomValues[index].toFixed(2);
-			});
-		
-			validateSum();
-		}
-		
-function generateRandomProbabilities(numFields) {
+        input.placeholder = `Probability ${i + 1}`;
+        input.oninput = validateSum;
 
-    let values = Array(numFields).fill(0).map(() => Math.random());
-    const sum = values.reduce((acc, val) => acc + val, 0);
-    values = values.map(val => val / sum);
+        container.appendChild(input);
+        container.appendChild(document.createElement("br"));
+      }
+    }
 
-    values = values.map(val => parseFloat(val.toFixed(2))); 
+    function randomizeFields() {
+      const inputs = document.querySelectorAll("#inputContainer input");
+      const numFields = inputs.length;
+      const randomValues = generateRandomProbabilities(numFields);
 
-    const roundedSum = values.reduce((acc, val) => acc + val, 0);
-    const difference = 1 - roundedSum;
-    values[values.length - 1] += parseFloat(difference.toFixed(4)); 
+      inputs.forEach((input, index) => {
+        input.value = randomValues[index].toFixed(2);
+      });
 
-    return values;
-}
-		
-		function validateSum() {
-			const inputs = document.querySelectorAll("#inputContainer input");
-			let sum = 0;
-		
-			inputs.forEach(input => {
-				const value = parseFloat(input.value) || 0;
-				sum += value;
-			});
-		
-			document.getElementById('sumStatus').innerText = "Sum: " + sum.toFixed(2) + " should be 1";
-			document.getElementById('generateGraphButton').disabled = (sum.toFixed(2) !== "1.00");
-		}
+      validateSum();
+    }
+
+    function generateRandomProbabilities(numFields) {
+
+      let values = Array(numFields).fill(0).map(() => Math.random());
+      const sum = values.reduce((acc, val) => acc + val, 0);
+      values = values.map(val => val / sum);
+
+      values = values.map(val => parseFloat(val.toFixed(2)));
+
+      const roundedSum = values.reduce((acc, val) => acc + val, 0);
+      const difference = 1 - roundedSum;
+      values[values.length - 1] += parseFloat(difference.toFixed(4));
+
+      return values;
+    }
+
+    function validateSum() {
+      const inputs = document.querySelectorAll("#inputContainer input");
+      let sum = 0;
+
+      inputs.forEach(input => {
+        const value = parseFloat(input.value) || 0;
+        sum += value;
+      });
+
+      document.getElementById('sumStatus').innerText = "Sum: " + sum.toFixed(2) + " should be 1";
+      document.getElementById('generateGraphButton').disabled = (sum.toFixed(2) !== "1.00");
+    }
 
     async function drawHistogram(empiricalCounts, probabilitiesInput, outcomeCount, sampleIntervals) {
       const canvas = document.getElementById("histogramCanvas");
       const ctx = canvas.getContext("2d");
       ctx.canvas.width = window.innerWidth;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-
+      const outcomeArray = Array.from({ length: outcomeCount }, (_, i) => i + 1);
       const empiricalFrequencies = empiricalCounts.map(count => count / sampleIntervals);
       const theoreticalFrequencies = probabilitiesInput;
 
@@ -602,10 +626,10 @@ function generateRandomProbabilities(numFields) {
       ctx.fillText("Empirical", canvas.width - 80, 20);
       ctx.fillStyle = "green";
       ctx.fillText("Theoretical", canvas.width - 80, 40);
-      const empiricalMeanAndVariance = computeWeightedMeanAndVariance(empiricalFrequencies, probabilitiesInput);
+      const empiricalMeanAndVariance = computeWeightedMeanAndVariance(outcomeArray, empiricalFrequencies);
       const empMean = empiricalMeanAndVariance.mean ? empiricalMeanAndVariance.mean.toFixed(3) : 0;
       const empVariance = empiricalMeanAndVariance.variance ? empiricalMeanAndVariance.variance.toFixed(3) : 0;
-      const theoreticalMeanAndVariance = computeWeightedMeanAndVariance(theoreticalFrequencies, probabilitiesInput);
+      const theoreticalMeanAndVariance = computeWeightedMeanAndVariance(outcomeArray, theoreticalFrequencies);
       const theMean = theoreticalMeanAndVariance.mean ? theoreticalMeanAndVariance.mean.toFixed(3) : 0;
       const theVariance = theoreticalMeanAndVariance.variance ? theoreticalMeanAndVariance.variance.toFixed(3) : 0;
       document.getElementById('histogramCanvas').style.display = 'block';
@@ -617,34 +641,40 @@ function generateRandomProbabilities(numFields) {
 
     async function generateHistogram() {
       const inputs = document.querySelectorAll("#inputContainer input");
-			const probabilitiesInput = Array.from(inputs).map(input => parseFloat(input.value) || 0);
+      const probabilitiesInput = Array.from(inputs).map(input => parseFloat(input.value) || 0);
       const outcomeCount = probabilitiesInput.length
       const sampleIntervals = parseInt(document.getElementById("sampleIntervals").value);
       const size = parseInt(document.getElementById("size").value);
 
-      const totalProbability = probabilitiesInput.reduce((acc, val) => acc + val, 0);
-
       const empiricalCounts = Array(outcomeCount).fill(0);
+      const outcomeArray = Array.from({ length: outcomeCount }, (_, i) => i + 1);
 
       for (let i = 0; i < sampleIntervals; i++) {
-        const sampleArray = Array(size).fill(0);
-        for (let j = 0; j < size; j++){
-          const randomValue = Math.random();
-          sampleArray[j] = randomValue;
+        const sample = []
+        for (let k = 0; k < size; k++) {
+          const randomValue = Math.random()
+          let cumulativeProbability = 0;
+          for (let j = 0; j < outcomeCount; j++) {
+            cumulativeProbability += probabilitiesInput[j];
+            if (randomValue < cumulativeProbability) {
+              sample.push(outcomeArray[j]);
+              break;
+            }
+          }
         }
-        const sampleMeanAndVariance = computeMeanAndVariance(sampleArray);
-        const sampleMean = sampleMeanAndVariance.mean ? sampleMeanAndVariance.mean.toFixed(2) : 0
 
+        const sampleMean = computeMeanAndVariance(sample).mean;
+        console.log(sampleMean)
+        console.log((sampleMean -1)/(outcomeCount-1))
         let cumulativeProbability = 0;
-
-        for (let k = 0; k < outcomeCount; k++) {
-          cumulativeProbability += probabilitiesInput[k];
-          if (sampleMean < cumulativeProbability) {
-            empiricalCounts[k]++;
-
+        for (let n = 0; n < outcomeCount; n++) {
+          cumulativeProbability += probabilitiesInput[n];
+          if ((sampleMean -1)/(outcomeCount-1) < cumulativeProbability) {
+            empiricalCounts[n]++;
             break;
           }
         }
+
         if (i % 100 === 0 || i === sampleIntervals - 1) {
           await drawHistogram(empiricalCounts, probabilitiesInput, outcomeCount, sampleIntervals);
         }

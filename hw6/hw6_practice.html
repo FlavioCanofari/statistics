@@ -605,7 +605,7 @@
       const ctx = canvas.getContext("2d");
       ctx.canvas.width = window.innerWidth;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-
+      const outcomeArray = Array.from({length: outcomeCount}, (_, i) => i + 1);
       const empiricalFrequencies = empiricalCounts.map(count => count / sampleIntervals);
       const theoreticalFrequencies = probabilitiesInput;
 
@@ -637,10 +637,10 @@
       ctx.fillText("Empirical", canvas.width - 80, 20);
       ctx.fillStyle = "green";
       ctx.fillText("Theoretical", canvas.width - 80, 40);
-      const empiricalMeanAndVariance = computeWeightedMeanAndVariance(empiricalFrequencies, probabilitiesInput);
+      const empiricalMeanAndVariance = computeWeightedMeanAndVariance(outcomeArray, empiricalFrequencies);
       const empMean = empiricalMeanAndVariance.mean ? empiricalMeanAndVariance.mean.toFixed(3) : 0;
       const empVariance = empiricalMeanAndVariance.variance ? empiricalMeanAndVariance.variance.toFixed(3) : 0;
-      const theoreticalMeanAndVariance = computeWeightedMeanAndVariance(theoreticalFrequencies, probabilitiesInput);
+      const theoreticalMeanAndVariance = computeWeightedMeanAndVariance(outcomeArray, theoreticalFrequencies);
       const theMean = theoreticalMeanAndVariance.mean ? theoreticalMeanAndVariance.mean.toFixed(3) : 0;
       const theVariance = theoreticalMeanAndVariance.variance ? theoreticalMeanAndVariance.variance.toFixed(3) : 0;
       document.getElementById('histogramCanvas').style.display = 'block';
@@ -655,8 +655,6 @@
       const probabilitiesInput = Array.from(inputs).map(input => parseFloat(input.value) || 0);
       const outcomeCount = probabilitiesInput.length
       const sampleIntervals = parseInt(document.getElementById("sampleIntervals").value);
-
-      const totalProbability = probabilitiesInput.reduce((acc, val) => acc + val, 0);
 
       const empiricalCounts = Array(outcomeCount).fill(0);
 

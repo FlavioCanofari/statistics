@@ -1049,7 +1049,6 @@
           for (let i = 1; i <= integer2; i++) {
             attackers.push(i);
           }
-          console.log(steps, attackers)
           let [attackerDatasets, successfulJumps, relativeSuccessfulJumps] = generateDataset(attackers, integer1_5, lambda, dt)
           let [finalDistribution, finalAttackerPenetrations] = getIntermediateDistribution(steps.length, attackerDatasets, integer1_5);
           const finalMeanAndVariance = computeMeanAndVariance(finalAttackerPenetrations);
