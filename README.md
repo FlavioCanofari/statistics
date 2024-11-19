@@ -10,3 +10,4 @@ All the homeworks links below:
 - Homework 4: [theory](hw4/hw4_theory.html) [practice](hw4/hw4_practice.html)
 - Homework 5: [theory](hw5/hw5_theory.html) [practice](hw5/hw5_practice.html)
 - Homework 6: [theory](hw6/hw6_theory.html) [practice](hw6/hw6_practice.html)
+- Homework 6: [practice](hw7/hw7_practice.html)
