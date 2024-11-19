@@ -424,7 +424,7 @@
   </header>
   <div class="mine_container">
     <section id="main_content">
-      <h2>Convergence of the empirical distribution to the theoretical distribution</h2>
+      <h2>Distribution of the sampling average</h2>
 
       <div class="input-section">
         <label for="numFields">Enter number of fields (2-10): </label>
@@ -459,6 +459,13 @@
       <b>
         <p id="resultVariance" style="text-align: center; font-size: 20px;"></p>
       </b>
+      <h1>Mean and Variance Analysis</h1>
+      <p>The average of the distribution of the averages of the samples is very close to the theoretical mean because the samples are generated respecting the parent distribution. Even if the sample size n or the number of samples m changes, this relationship remains valid.
+        For the variance, the relationship is similar but the variance of the sample mean distribution is lower than the variance of the parent distribution. This reduction is due to the fact that the variance of the sample mean decreases with increasing sample size n.
+      </p>
+      <h1>Code Explanation</h1>
+      <p>The only major change in the code compared to the previous homework concerns the generation of data. In fact, this time m arrays of size n are created, where each is filled with the value of the various outcomes according to the distribution previously decided by the user. For each of these arrays, the mean is calculated, which is shown as the distribution on the graph in addition to the variance.</p>
+      <img src="./code-1.png">
     </section>
   </div>
   <script>
@@ -653,7 +660,7 @@
       const result = {};
 
       for (let i = min; i <= max; i = parseFloat((i + step).toFixed(2))) {
-        result[i.toFixed(2)] = 0;  // Aggiungi ogni numero come stringa formattato a 2 decimali
+        result[i.toFixed(2)] = 0;
       }
 
       samples.forEach(value => {
