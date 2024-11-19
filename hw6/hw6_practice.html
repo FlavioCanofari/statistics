@@ -489,7 +489,7 @@
         \[
         M_n = M_{n-1} + p_n \cdot (x_n - \mu_n)(x_n - \mu_{n-1})
         \]
-        where M_n accumulates the weighted contribution to the variance.<br /><br />
+        where \(M_n\) accumulates the weighted contribution to the variance.<br /><br />
         <img src="./code-3.png">
       </p>
       <br /><br />
@@ -645,7 +645,7 @@
       const theVariance = theoreticalMeanAndVariance.variance ? theoreticalMeanAndVariance.variance.toFixed(3) : 0;
       document.getElementById('histogramCanvas').style.display = 'block';
       document.getElementById('resultMean').innerHTML = `Empirical mean: ${empMean} vs Theorical mean: ${theMean}`;
-      document.getElementById('resultVariance').innerHTML = `Empirical variance: ${empVariance}  vs Theorical variance: ${theVariance}`;
+      document.getElementById('resultVariance').innerHTML = `Empirical variance: ${empVariance} vs Theorical variance: ${theVariance}`;
       await new Promise(r => setTimeout(r, 1));
     }
 
