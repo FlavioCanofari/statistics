@@ -429,7 +429,8 @@
       <h1>Caesar Cipher and Frequency Analysis</h1>
 
       <h2>Input Text</h2>
-      <textarea id="inputText" style="width: 100%;" rows="10" placeholder="Enter your text here...">But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete account of the system, and expound the actual teachings of the great explorer of the truth, the master-builder of human happiness. No one rejects, dislikes, or avoids pleasure itself, because it is pleasure, but because those who do not know how to pursue pleasure rationally encounter consequences that are extremely painful. Nor again is there anyone who loves or pursues or desires to obtain pain of itself, because it is pain, but because occasionally circumstances occur in which toil and pain can procure him some great pleasure. To take a trivial example, which of us ever undertakes laborious physical exercise, except to obtain some advantage from it? But who has any right to find fault with a man who chooses to enjoy a pleasure that has no annoying consequences, or one who avoids a pain that produces no resultant pleasure? On the other hand, we denounce with righteous indignation and dislike men who are so beguiled and demoralized by the charms of pleasure of the moment, so blinded by desire, that they cannot foresee </textarea>
+      <textarea id="inputText" style="width: 100%;" rows="10"
+        placeholder="Enter your text here...">But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete account of the system, and expound the actual teachings of the great explorer of the truth, the master-builder of human happiness. No one rejects, dislikes, or avoids pleasure itself, because it is pleasure, but because those who do not know how to pursue pleasure rationally encounter consequences that are extremely painful. Nor again is there anyone who loves or pursues or desires to obtain pain of itself, because it is pain, but because occasionally circumstances occur in which toil and pain can procure him some great pleasure. To take a trivial example, which of us ever undertakes laborious physical exercise, except to obtain some advantage from it? But who has any right to find fault with a man who chooses to enjoy a pleasure that has no annoying consequences, or one who avoids a pain that produces no resultant pleasure? On the other hand, we denounce with righteous indignation and dislike men who are so beguiled and demoralized by the charms of pleasure of the moment, so blinded by desire, that they cannot foresee </textarea>
       <br><br>
       <h2>Encrypt the Text</h2>
       <label for="shift">Enter shift value (1-25):</label>
@@ -442,10 +443,90 @@
       <div class="output" id="decryptedOutput"></div>
 
 
+      <hr>
+      <h1>Modular Exponentiation Encryption</h1>
+      <h2>Input Text</h2>
+      <textarea id="modularText" style="width: 100%;" rows="10"
+        placeholder="Enter your text here...">Hello World</textarea>
+      <br><br>
+      <h2>Encrypt the Text</h2>
+      <label for="exponent">Enter Exponent (k):</label>
+      <input type="number" id="exponent" min="1" value="3">
+      <br>
+      <label for="modulus">Enter Prime Modulus (P):</label>
+      <input type="number" id="modulus" min="27" value="37">
+
+      <button onclick="encryptTextModular()">Encrypt (Modular)</button>
+
+      <br><br>
+      <div class="output">
+        <div id="encryptedOutputModular" style="word-wrap: break-word;"></div>
+      </div>
+
     </section>
   </div>
   <div class="mine_container">
     <section id="main_content">
+      <h1>Research</h1>
+      <h2>Cryptographic Analysis: Caesar Cipher vs RSA</h2>
+      <p>
+        Frequency analysis is a statistical technique used to break simple substitution ciphers like the Caesar cipher.
+        In this cipher, each letter in the plaintext is shifted by a constant value, making it relatively easy to
+        decrypt if the shift value is known or can be deduced.
+        The key to cracking the Caesar cipher lies in the fact that certain letters appear with a predictable frequency
+        in natural language.
+        For example, in English, the letter 'E' appears most often, followed by 'T', 'A', 'O', and others. A simple
+        analysis of letter frequencies can help identify the
+        shift key used for encryption.
+      </p>
+
+      <p>
+        In contrast, breaking RSA encryption without knowledge of the private key or access to critical information is
+        computationally infeasible.
+        RSA relies on the mathematical difficulty of factoring large prime numbers. While the encryption process uses
+        the public key (composed of two prime numbers),
+        decrypting the message requires the private key, which is derived from those prime numbers. The security of RSA
+        comes from the fact that,
+        as the size of the prime numbers increases, factoring the product becomes extremely time-consuming and
+        practically impossible with current computational methods.
+      </p>
+
+      <h2>Visualizing Distributions and Shannon Entropy</h2>
+      <p>
+        A key aspect of cryptographic analysis is understanding how the statistical properties of encrypted messages
+        relate to the strength of the encryption method.
+        In the Caesar cipher, we expect a noticeable pattern in the frequency distribution of letters, whereas in RSA
+        encryption, the distribution is much more random.
+      </p>
+
+      <h3>Shannon Entropy of Caesar Cipher</h3>
+      <p>
+        The Shannon entropy for a distribution measures the amount of uncertainty or unpredictability.
+        In the case of the Caesar cipher, due to its simple shift mechanism, the entropy is relatively low because the
+        frequency of letters can still be predicted.
+        For example, if we were to perform frequency analysis on a Caesar cipher text, we would likely see patterns in
+        letter frequency, such as 'E' being the most common letter.
+        Thus, the entropy is lower because the distribution of characters is less random.
+      </p>
+
+      <h3>Shannon Entropy of RSA</h3>
+      <p>
+        On the other hand, RSA encryption produces a much higher entropy in its encrypted output. The ciphertext is
+        highly randomized and exhibits no noticeable patterns.
+        Even if an attacker were to analyze the ciphertext, without the private key, there is no way to predict the
+        original message.
+        This results in a higher entropy value, signifying greater unpredictability and security.
+      </p>
+
+      <h2>Summary and Findings</h2>
+      <p>
+        While the Caesar cipher is vulnerable to frequency analysis due to its simplistic approach, where the
+        patterns in letter frequency can be easily exploited, on the other hand RSA encryption provides much stronger
+        security due to its reliance on number-theoretic problems, such
+        as factoring large prime numbers, which is computationally infeasible for modern systems.
+        The Shannon entropy calculations reveal that the Caesar cipher has lower entropy and thus lower security, while
+        RSA encryption has higher entropy, making it more secure.
+      </p>
 
       <h1>Code Explanation</h1>
 
@@ -597,6 +678,53 @@
       document.getElementById("decryptedOutput").innerHTML = `
         <br><strong>Stronger Decryption Proposal:</strong><br><br>${decrypted}
         `;
+    }
+
+    function letterToNumber(char) {
+      return char.toUpperCase().charCodeAt(0) - 65;
+    }
+
+    function numberToLetter(num) {
+      return String.fromCharCode((num % 26) + 65);
+    }
+
+    function modExp(base, exp, mod) {
+      let result = 1;
+      base = base % mod;
+      while (exp > 0) {
+        if (exp % 2 === 1) {
+          result = (result * base) % mod;
+        }
+        exp = Math.floor(exp / 2);
+        base = (base * base) % mod;
+      }
+      return result;
+    }
+
+    function encryptModular(text, exponent, modulus) {
+      const cleanText = text.replace(/[^a-zA-Z]/g, '').toUpperCase();
+      return cleanText
+        .split('')
+        .map(char => {
+          const num = letterToNumber(char);
+          const encoded = modExp(num, exponent, modulus);
+          return numberToLetter(encoded);
+        })
+        .join('');
+    }
+
+    function encryptTextModular() {
+      const text = document.getElementById("modularText").value;
+      const exponent = parseInt(document.getElementById("exponent").value, 10);
+      const modulus = parseInt(document.getElementById("modulus").value, 10);
+
+      if (!text || isNaN(exponent) || isNaN(modulus)) {
+        alert("Please enter valid text, exponent, and modulus values.");
+        return;
+      }
+
+      const encrypted = encryptModular(text, exponent, modulus);
+      document.getElementById("encryptedOutputModular").innerText = encrypted;
     }
   </script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
